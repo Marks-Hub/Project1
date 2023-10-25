@@ -5,22 +5,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CSV to Json testing</title>
+    <link rel="stylesheet" type="text/css" href="grid.css">
 </head>
 
-<body>
+<body onload="displayData()">
 
-        <form id="testForm">
-            <input type="file" id="UploadFile" accept=".csv" />
-            <br />
-            <input onclick="csvJSON()" type="submit" value="submit" />
-        </form>
-        <button onclick="clicky()">Click Me!</button> <br />
-        <button onclick="getHeaders(headers2)">Get headers!</button><br />
-        <button onclick="document.location='CSV_to_JSOn.html'">Show Data</button>
-        <script src="CSVToJSON.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <form id="testForm">
+        <input type="file" id="UploadFile" accept=".csv" />
+        <br />
+        <input onclick="csvJSON()" type="submit" value="submit" />
+    </form>
+    <button onclick="clicky()">Click Me!</button> <br />
+    <button onclick="getHeaders(headers2)">Get headers!</button><br />
+    <button onclick="displayData()">Display Data</button><br />
+    <script src="CSVToJSON.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <div class="wrapper" id="wrap">
 
-        <p id="Text"></p>
+    </div>
+<script>
+    
+</script>
+    <p id="Text"></p>
 
 </body>
 
