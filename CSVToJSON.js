@@ -1,7 +1,6 @@
 
-var json_data, newString, newString2, newString3, newString4, headers2;
-var json_data_array = [], result = [], headers = [];
-
+var json_data, newString, newString2, newString3, newString4, headers2, CVSdata2;
+var json_data_array = [], result = [], CVSheaders = [], CVSdata = [], dataWithoutHeaders = [];
 function csvJSON() {
   const testForm = document.getElementById("testForm");
   const csvDataFile = document.getElementById("UploadFile");
@@ -33,14 +32,25 @@ function clicky() {
   json_data_array = newString4.split(',');
 
   for (let i = 0; i < json_data_array.length; i++) {
-    headers.push(json_data_array[i].split(':', 1));
+    CVSheaders.push(json_data_array[i].split(':', 1));
 
   }
-  let text = headers.toString()
+  for (let i = 0; i < json_data_array.length; i++) {
+    CVSdata.push(json_data_array[i].split(':'));
+  }
+  let text2 = CVSdata.toString()
+  CVSdata2 = text2.split(',');
+  for (let i = 0; i < CVSdata2.length; i++) {
+      dataWithoutHeaders.push(CVSdata2[i+1]); // data is inside datawithoutheaders
+      i++;
+  }
+  console.log(dataWithoutHeaders);
+  let text = CVSheaders.toString()
   headers2 = text.split(',');
   console.log(headers2[2]);
 }
-function getHeaders(headers2) {
+
+function getHeaders(headers2) {//this function filters the headers2 variable so that there are no repeating values in the array.
   return headers2.filter((item, index) => headers2.indexOf(item) === index);
 }
 
