@@ -58,23 +58,28 @@ function displayData() {
  // for (let i = 0; i < getHeaders(headers2).length; i++) {
     //document.getElementById("spnHeader" + i).innerHTML = getHeaders(headers2)[i];
  // }
- const wrapper = document.createElement("div");
- wrapper.setAttribute('class','wrapper')
+ //const wrapper = document.createElement("div");
+ //wrapper.setAttribute('class','wrapper')
   for (let i = 0; i < getHeaders(headers2).length; i++) {
     const div = document.createElement("div");
-    div.setAttribute('class','box')
-    wrapper.appendChild(div);
+    div.setAttribute('class','box');
+    document.getElementById("wrap").appendChild(div);
     const span = document.createElement("span");
     
     span.setAttribute("id","spnHeader" + i);
+    //span.innerHTML = getHeaders(headers2)[i];
+    //let test = document.getElementById("spnHeader" + i).innerHTML;
+    //console.log(test);
 
-    document.getElementById("spnHeader0") = "p";
-    document.getElementById("spnHeader0").innerHTML = getHeaders(headers2)[i];
     
     div.appendChild(span);
     
+    //document.getElementById("Text").value = para;
     //document.getElementsByClassName("box").appendChild(span);
-    
-
   }
+  for (let i = 0; i < getHeaders(headers2).length; i++) {
+    document.getElementById("spnHeader" + i).innerHTML = getHeaders(headers2)[i];
+    
+  }
+document.getElementById("Text").innerHTML=" "
 }
