@@ -48,6 +48,8 @@ function clicky() {
   let text = CVSheaders.toString()
   headers2 = text.split(',');
   console.log(headers2[2]);
+
+  headers2.filter((item, index) => headers2.indexOf(item) === index);
 }
 
 function getHeaders(headers2) {//this function filters the headers2 variable so that there are no repeating values in the array.
