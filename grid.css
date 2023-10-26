@@ -1,6 +1,6 @@
 span {
     font-style: italic;
-    background-color: green;
+    background-color: rgb(0, 247, 255);
     color: red;
 
 }
@@ -15,7 +15,7 @@ span {
 }
 
 .box {
-    background-color: green;
+    background-color: rgb(0, 247, 255);
     color: #111;
     border-radius: 5px;
     padding: 5px;
