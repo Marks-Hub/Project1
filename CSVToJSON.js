@@ -1,5 +1,5 @@
 
-var json_data, newString, newString2, newString3, newString4, headers2, CVSdata2;
+var json_data, newString, newString2, newString3, newString4, headers2, CVSdata2, styleNum = "", wrapperInfo;
 var json_data_array = [], result = [], CVSheaders = [], CVSdata = [], dataWithoutHeaders = [];
 function csvJSON() {
   const testForm = document.getElementById("testForm");
@@ -41,8 +41,8 @@ function clicky() {
   let text2 = CVSdata.toString()
   CVSdata2 = text2.split(',');
   for (let i = 0; i < CVSdata2.length; i++) {
-      dataWithoutHeaders.push(CVSdata2[i+1]); // data is inside datawithoutheaders
-      i++;
+    dataWithoutHeaders.push(CVSdata2[i + 1]); // data is inside datawithoutheaders
+    i++;
   }
   console.log(dataWithoutHeaders);
   let text = CVSheaders.toString()
@@ -54,32 +54,52 @@ function getHeaders(headers2) {//this function filters the headers2 variable so 
   return headers2.filter((item, index) => headers2.indexOf(item) === index);
 }
 
+
 function displayData() {
- // for (let i = 0; i < getHeaders(headers2).length; i++) {
-    //document.getElementById("spnHeader" + i).innerHTML = getHeaders(headers2)[i];
- // }
- //const wrapper = document.createElement("div");
- //wrapper.setAttribute('class','wrapper')
+  
+  // for (let i = 0; i < getHeaders(headers2).length; i++) {
+  //document.getElementById("spnHeader" + i).innerHTML = getHeaders(headers2)[i];
+  // }
+  //const wrapper = document.createElement("div");
+  //wrapper.setAttribute('class','wrapper');
   for (let i = 0; i < getHeaders(headers2).length; i++) {
+    styleNum += "120px ";
+    wrapperInfo = ".wrapper { grid-template-columns: " + styleNum + "; }";
+    var style = document.createElement('style');
+    style.type = 'text/css';
+    style.innerHTML = wrapperInfo;
+    document.getElementsByTagName('head')[0].appendChild(style);
+
     const div = document.createElement("div");
-    div.setAttribute('class','box');
+    div.setAttribute('class', 'box');
     document.getElementById("wrap").appendChild(div);
     const span = document.createElement("span");
-    
-    span.setAttribute("id","spnHeader" + i);
+
+    span.setAttribute("id", "spnHeader" + i);
     //span.innerHTML = getHeaders(headers2)[i];
     //let test = document.getElementById("spnHeader" + i).innerHTML;
-    //console.log(test);
-
-    
+    //console.log(test); 
     div.appendChild(span);
-    
     //document.getElementById("Text").value = para;
     //document.getElementsByClassName("box").appendChild(span);
+
   }
+
   for (let i = 0; i < getHeaders(headers2).length; i++) {
     document.getElementById("spnHeader" + i).innerHTML = getHeaders(headers2)[i];
-    
   }
-document.getElementById("Text").innerHTML=" "
+  document.getElementById("Text").innerHTML = " "
+
+  for (let i = 0; i < dataWithoutHeaders.length; i++) {
+    const div = document.createElement("div");
+    div.setAttribute('class', 'box');
+    document.getElementById("wrap").appendChild(div);
+    const span = document.createElement("span");
+
+    span.setAttribute("id", "spnData" + i);
+    div.appendChild(span);
+
+    document.getElementById("spnData" + i).innerHTML = dataWithoutHeaders[i];
+  }
+
 }
