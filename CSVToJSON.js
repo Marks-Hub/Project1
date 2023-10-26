@@ -16,6 +16,7 @@ function csvJSON() {
       document.getElementById("Text").innerHTML = JSON.stringify(csvData);
       //document.write(JSON.stringify(csvData));
       json_data = document.getElementById("Text").innerHTML;
+      document.getElementById("Text").innerHTML = "";
 
     };
     reader.readAsText(input);
