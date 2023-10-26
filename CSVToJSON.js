@@ -103,3 +103,12 @@ function displayData() {
   }
 
 }
+
+function sortAscending(){
+  //data.sort();
+}
+
+function SortDescending(){
+  //data.sort();
+  //data.reverse();
+}
