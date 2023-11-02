@@ -1,6 +1,6 @@
 
 var json_data, newString, newString2, newString3, newString4, headers2, CVSdata2, styleNum = "", wrapperInfo;
-var json_data_array = [], result = [], CVSheaders = [], CVSdata = [], dataWithoutHeaders = [];
+var json_data_array = [], result = [], CVSheaders = [], CVSdata = [], dataWithoutHeaders = [], headersForSort = [];
 function csvJSON() {
   const testForm = document.getElementById("testForm");
   const csvDataFile = document.getElementById("UploadFile");
@@ -57,14 +57,12 @@ function getHeaders(headers2) {//this function filters the headers2 variable so 
   return headers2.filter((item, index) => headers2.indexOf(item) === index);
 }
 
-
+function Clear() {
+  location.reload();
+}
 function displayData() {
-  
-  // for (let i = 0; i < getHeaders(headers2).length; i++) {
-  //document.getElementById("spnHeader" + i).innerHTML = getHeaders(headers2)[i];
-  // }
-  //const wrapper = document.createElement("div");
-  //wrapper.setAttribute('class','wrapper');
+
+  document.getElementsByClassName("wrapper").innerHTML = "";
   for (let i = 0; i < getHeaders(headers2).length; i++) {
     styleNum += "120px ";
     wrapperInfo = ".wrapper { grid-template-columns: " + styleNum + "; }";
@@ -79,19 +77,17 @@ function displayData() {
     const span = document.createElement("span");
 
     span.setAttribute("id", "spnHeader" + i);
-    //span.innerHTML = getHeaders(headers2)[i];
-    //let test = document.getElementById("spnHeader" + i).innerHTML;
-    //console.log(test); 
+
     div.appendChild(span);
-    //document.getElementById("Text").value = para;
-    //document.getElementsByClassName("box").appendChild(span);
+
 
   }
 
   for (let i = 0; i < getHeaders(headers2).length; i++) {
     document.getElementById("spnHeader" + i).innerHTML = getHeaders(headers2)[i];
+    headersForSort.push(getHeaders(headers2)[i]);
   }
-  document.getElementById("Text").innerHTML = " "
+  //document.getElementById("Text").innerHTML = " ";
 
   for (let i = 0; i < dataWithoutHeaders.length; i++) {
     const div = document.createElement("div");
@@ -105,13 +101,45 @@ function displayData() {
     document.getElementById("spnData" + i).innerHTML = dataWithoutHeaders[i];
   }
 
+
+  var myDiv = document.getElementById("myDiv");
+
+  //Ascending code
+  var selectList = document.createElement("select");
+  selectList.setAttribute("id", "mySelect");
+  myDiv.appendChild(selectList);
+
+  //Create and append the options
+  for (var i = 0; i < headersForSort.length; i++) {
+    var option = document.createElement("option");
+    option.setAttribute("value", headersForSort[i]);
+    option.text = headersForSort[i];
+    selectList.appendChild(option);
+  }
+  ///////////////////////////////////////////////////////
+  //Descending code
+
+  var myDiv2 = document.getElementById("myDiv2");
+
+  var selectList2 = document.createElement("select");
+  selectList.setAttribute("id", "mySelect");
+  myDiv2.appendChild(selectList2);
+
+  //Create and append the options
+  for (var i = 0; i < headersForSort.length; i++) {
+    var option2 = document.createElement("option");
+    option2.setAttribute("value", headersForSort[i]);
+    option2.text = headersForSort[i];
+    selectList2.appendChild(option2);
+  }
 }
 
-function sortAscending(){
-  //data.sort();
+function sortAscending() {
+
+
 }
 
-function SortDescending(){
+function SortDescending() {
   //data.sort();
   //data.reverse();
 }
