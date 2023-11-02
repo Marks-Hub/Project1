@@ -121,9 +121,9 @@ function displayData() {
 
   var myDiv2 = document.getElementById("myDiv2");
 
-  var selectList2 = document.createElement("select");
+  var selectList2 = document.getElementById("sortAscending");
   selectList.setAttribute("id", "mySelect");
-  myDiv2.appendChild(selectList2);
+  //myDiv2.appendChild(selectList2);
 
   //Create and append the options
   for (var i = 0; i < headersForSort.length; i++) {
@@ -135,7 +135,30 @@ function displayData() {
 }
 
 function sortAscending() {
-
+  var header;
+  var array = [];
+  if (document.getElementById("sortAscending").value == "Sort Ascending") {
+    alert("Not a valid option");
+    
+  }
+else{
+  for (let i = 0; i < headersForSort.length; i++) {
+    let x = i;
+    if (document.getElementById("sortAscending").value == headersForSort[i]) {
+      for (let k = i; k < dataWithoutHeaders.length; k++) {
+        array.push(dataWithoutHeaders[x]);
+        x += headersForSort.length;
+        console.log(array);
+        
+      }
+    }
+    
+  }
+  for (let j = 0; j < array.length; j++) {
+    const element = array[j];
+    
+  }
+}
 
 }
 
