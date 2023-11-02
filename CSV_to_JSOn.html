@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="grid.css">
 </head>
 
-<body onload="displayData()">
+<body onload="displayData()" id="body">
 
     <form id="testForm">
         <input type="file" id="UploadFile" accept=".csv" />
@@ -18,10 +18,18 @@
     <button class="button" onclick="clicky()">Prepare Data!</button>  
     <!--<button class="button" onclick="getHeaders(headers2)">Get headers!</button>-->
     <button class="button" onclick="displayData()">Display Data</button>
+    <button class="button" onclick="Clear()">Clear</button>
+    <select id="sortAscending" onload="sortAscending()">
+        <option>Sort Ascending</option>
+        
+    </select>
+    <div id="myDiv">Sort Ascending</div>
+    <div id="myDiv2">Sort Descending</div>
     <!--
         <button onclick="sortAscending(data)"> Sort Ascending </button> <br/>
         <button onclick="sortDescending(data)"> Sort Descending </button> <br/>
     -->
+
     <script src="CSVToJSON.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
     <div class="wrapper" id="wrap">
