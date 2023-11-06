@@ -1,6 +1,5 @@
-
-var json_data, newString, newString2, newString3, newString4, headers2, CVSdata2, styleNum = "", wrapperInfo;
-var json_data_array = [], result = [], CVSheaders = [], CVSdata = [], dataWithoutHeaders = [], headersForSort = [];
+var json_data, newString, newString2, newString3, newString4, headers2, CVSdata2, styleNum = "", wrapperInfo, best, sortedAscending, sortedDescending, worst;
+var json_data_array = [], result = [], CVSheaders = [], CVSdata = [], dataWithoutHeaders = [], headersForSort = [], arrayAscend = [], arrayDescend = [];
 function csvJSON() {
   const testForm = document.getElementById("testForm");
   const csvDataFile = document.getElementById("UploadFile");
@@ -20,8 +19,6 @@ function csvJSON() {
 
     };
     reader.readAsText(input);
-
-
   });
 }
 
@@ -61,7 +58,6 @@ function Clear() {
   location.reload();
 }
 function displayData() {
-
   document.getElementsByClassName("wrapper").innerHTML = "";
   for (let i = 0; i < getHeaders(headers2).length; i++) {
     styleNum += "120px ";
@@ -79,8 +75,6 @@ function displayData() {
     span.setAttribute("id", "spnHeader" + i);
 
     div.appendChild(span);
-
-
   }
 
   for (let i = 0; i < getHeaders(headers2).length; i++) {
@@ -100,15 +94,9 @@ function displayData() {
 
     document.getElementById("spnData" + i).innerHTML = dataWithoutHeaders[i];
   }
-
-
-  var myDiv = document.getElementById("myDiv");
-
   //Ascending code
-  var selectList = document.createElement("select");
+  var selectList = document.getElementById("sortAscending");
   selectList.setAttribute("id", "mySelect");
-  myDiv.appendChild(selectList);
-
   //Create and append the options
   for (var i = 0; i < headersForSort.length; i++) {
     var option = document.createElement("option");
@@ -118,13 +106,8 @@ function displayData() {
   }
   ///////////////////////////////////////////////////////
   //Descending code
-
-  var myDiv2 = document.getElementById("myDiv2");
-
-  var selectList2 = document.getElementById("sortAscending");
-  selectList.setAttribute("id", "mySelect");
-  //myDiv2.appendChild(selectList2);
-
+  var selectList2 = document.getElementById("sortDescending");
+  selectList2.setAttribute("id", "mySelect2");
   //Create and append the options
   for (var i = 0; i < headersForSort.length; i++) {
     var option2 = document.createElement("option");
@@ -132,37 +115,72 @@ function displayData() {
     option2.text = headersForSort[i];
     selectList2.appendChild(option2);
   }
-}
-
-function sortAscending() {
-  var header;
-  var array = [];
-  if (document.getElementById("sortAscending").value == "Sort Ascending") {
-    alert("Not a valid option");
-    
+  ///////////////////////////////////////////////////////////////
+  //color code
+  var selectList3 = document.getElementById("color");
+  selectList3.setAttribute("id", "mySelect3");
+  //Create and append the options
+  for (var i = 0; i < headersForSort.length; i++) {
+    var option3 = document.createElement("option");
+    option3.setAttribute("value", headersForSort[i]);
+    option3.text = headersForSort[i];
+    selectList3.appendChild(option3);
   }
-else{
-  for (let i = 0; i < headersForSort.length; i++) {
-    let x = i;
-    if (document.getElementById("sortAscending").value == headersForSort[i]) {
-      for (let k = i; k < dataWithoutHeaders.length; k++) {
-        array.push(dataWithoutHeaders[x]);
-        x += headersForSort.length;
-        console.log(array);
-        
+}
+function sortAscending() {
+  if (document.getElementById("mySelect").value == "Sort Ascending") {
+    alert("Not a valid option");
+  }
+  else {
+    for (let i = 0; i < headersForSort.length; i++) {
+      let x = i;
+      if (document.getElementById("mySelect").value == headersForSort[i]) {
+        for (let k = i; k < (dataWithoutHeaders.length / headersForSort.length); k++) {
+          arrayAscend.push(dataWithoutHeaders[x]);
+          x += headersForSort.length;
+        }
       }
     }
-    
+    sortedAscending = arrayAscend.sort();
+    console.log(sortedAscending);
   }
-  for (let j = 0; j < array.length; j++) {
-    const element = array[j];
-    
-  }
-}
-
 }
 
 function SortDescending() {
-  //data.sort();
-  //data.reverse();
+  if (document.getElementById("mySelect2").value == "Sort Descending") {
+    alert("Not a valid option");
+  }
+  else {
+    for (let i = 0; i < headersForSort.length; i++) {
+      let x = i;
+      if (document.getElementById("mySelect2").value == headersForSort[i]) {
+        for (let k = i; k < (dataWithoutHeaders.length / headersForSort.length); k++) {
+          arrayDescend.push(dataWithoutHeaders[x]);
+          x += headersForSort.length;
+        }
+      }
+    }
+    sortedDescending = arrayDescend.sort().reverse();
+    console.log(sortedDescending);
+  }
 }
+
+function color() {
+  if (document.getElementById("mySelect3").value == "Color") {
+    alert("Not a valid option");
+  }
+  else {
+    for (let i = 0; i < headersForSort.length; i++) {
+      let x = i;
+      if (document.getElementById("mySelect3").value == headersForSort[i]) {
+        for (let k = i; k < (dataWithoutHeaders.length / headersForSort.length); k++) {
+          arrayDescend.push(dataWithoutHeaders[x]);
+          x += headersForSort.length;
+        }
+      }
+    }
+    sortedDescending = arrayDescend.sort().reverse();
+    console.log(sortedDescending);
+  }
+}
+
