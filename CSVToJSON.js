@@ -1,5 +1,5 @@
 var json_data, newString, newString2, newString3, newString4, headers2, CVSdata2, styleNum = "", wrapperInfo, best, sortedAscending, sortedDescending, worst;
-var json_data_array = [], result = [], CVSheaders = [], CVSdata = [], dataWithoutHeaders = [], headersForSort = [], arrayAscend = [], arrayDescend = [];
+var json_data_array = [], result = [], CVSheaders = [], CVSdata = [], dataWithoutHeaders = [], headersForSort = [];
 function csvJSON() {
   const testForm = document.getElementById("testForm");
   const csvDataFile = document.getElementById("UploadFile");
@@ -85,6 +85,7 @@ function displayData() {
 
   for (let i = 0; i < dataWithoutHeaders.length; i++) {
     const div = document.createElement("div");
+    div.setAttribute("id", "div" + i)
     div.setAttribute('class', 'box');
     document.getElementById("wrap").appendChild(div);
     const span = document.createElement("span");
@@ -128,6 +129,7 @@ function displayData() {
   }
 }
 function sortAscending() {
+  var arrayAscend = [];
   if (document.getElementById("mySelect").value == "Sort Ascending") {
     alert("Not a valid option");
   }
@@ -147,6 +149,7 @@ function sortAscending() {
 }
 
 function SortDescending() {
+  var arrayDescend = [];
   if (document.getElementById("mySelect2").value == "Sort Descending") {
     alert("Not a valid option");
   }
@@ -166,6 +169,7 @@ function SortDescending() {
 }
 
 function color() {
+  var colorSort = [];
   if (document.getElementById("mySelect3").value == "Color") {
     alert("Not a valid option");
   }
@@ -174,13 +178,28 @@ function color() {
       let x = i;
       if (document.getElementById("mySelect3").value == headersForSort[i]) {
         for (let k = i; k < (dataWithoutHeaders.length / headersForSort.length); k++) {
-          arrayDescend.push(dataWithoutHeaders[x]);
+          colorSort.push(dataWithoutHeaders[x]);
           x += headersForSort.length;
         }
       }
     }
-    sortedDescending = arrayDescend.sort().reverse();
-    console.log(sortedDescending);
+    colorSort = colorSort.sort();
+  }
+  for (let i = 0; i < headersForSort.length; i++) {
+    let x = i;
+    if (document.getElementById("mySelect3").value == headersForSort[i]) {
+      for (let k = i; k < (dataWithoutHeaders.length / headersForSort.length); k++) {
+        if (dataWithoutHeaders[x] == colorSort[colorSort.length - 1]) {
+          document.getElementById("div" + x).style.backgroundColor = "green";
+          document.getElementById("spnData" + x).style.backgroundColor = "green";
+        }
+        if (dataWithoutHeaders[x] == colorSort[0]) {
+          document.getElementById("div" + x).style.backgroundColor = "red";
+          document.getElementById("spnData" + x).style.backgroundColor = "red";
+        }
+          x += headersForSort.length;
+      }
+    }
   }
 }
 
