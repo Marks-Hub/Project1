@@ -170,6 +170,7 @@ function SortDescending() {
 
 function color() {
   var colorSort = [];
+  //repeated sort from the ascend and descend
   if (document.getElementById("mySelect3").value == "Color") {
     alert("Not a valid option");
   }
@@ -185,15 +186,18 @@ function color() {
     }
     colorSort = colorSort.sort();
   }
+  //using x to find which div and span has largest and smallest
   for (let i = 0; i < headersForSort.length; i++) {
     let x = i;
     if (document.getElementById("mySelect3").value == headersForSort[i]) {
       for (let k = i; k < (dataWithoutHeaders.length / headersForSort.length); k++) {
         if (dataWithoutHeaders[x] == colorSort[colorSort.length - 1]) {
+          //color largest green
           document.getElementById("div" + x).style.backgroundColor = "green";
           document.getElementById("spnData" + x).style.backgroundColor = "green";
         }
         if (dataWithoutHeaders[x] == colorSort[0]) {
+          //color lowest red
           document.getElementById("div" + x).style.backgroundColor = "red";
           document.getElementById("spnData" + x).style.backgroundColor = "red";
         }
