@@ -1,5 +1,5 @@
-var json_data, newString, newString2, newString3, newString4, headers2, CVSdata2, styleNum = "", wrapperInfo, best, sortedAscending, sortedDescending, worst;
-var json_data_array = [], result = [], CVSheaders = [], CVSdata = [], dataWithoutHeaders = [], headersForSort = [];
+var json_data, newString, newString2, newString3, newString4, headers2, CVSdata2, styleNum = "", wrapperInfo, best, sortedAscending, sortedDescending, worst, numDivided;
+var json_data_array = [], result = [], CVSheaders = [], CVSdata = [], dataWithoutHeaders = [], headersForSort = [], arrayAscend = [], arrayDescend = [];
 function csvJSON() {
   const testForm = document.getElementById("testForm");
   const csvDataFile = document.getElementById("UploadFile");
@@ -26,6 +26,7 @@ function clicky() {
   newString = json_data.replace(/{/g, "");
   newString2 = newString.replace(/"/g, "");
   newString3 = newString2.replace(/]/g, "");
+  newString3 = newString2.replace(/}/g, "");
   newString4 = newString3.replace("[", "");
   json_data_array = newString4.split(',');
 
@@ -127,9 +128,19 @@ function displayData() {
     option3.text = headersForSort[i];
     selectList3.appendChild(option3);
   }
+  ////////////////////////////////////////////////////////////
+  //color 10% code
+  var selectList4 = document.getElementById("color10");
+  selectList4.setAttribute("id", "mySelect4");
+  //Create and append the options
+  for (var i = 0; i < headersForSort.length; i++) {
+    var option4 = document.createElement("option");
+    option4.setAttribute("value", headersForSort[i]);
+    option4.text = headersForSort[i];
+    selectList4.appendChild(option4);
+  }
 }
 function sortAscending() {
-  var arrayAscend = [];
   if (document.getElementById("mySelect").value == "Sort Ascending") {
     alert("Not a valid option");
   }
@@ -145,11 +156,11 @@ function sortAscending() {
     }
     sortedAscending = arrayAscend.sort();
     console.log(sortedAscending);
+    arrayAscend = [];
   }
 }
 
 function SortDescending() {
-  var arrayDescend = [];
   if (document.getElementById("mySelect2").value == "Sort Descending") {
     alert("Not a valid option");
   }
@@ -165,11 +176,13 @@ function SortDescending() {
     }
     sortedDescending = arrayDescend.sort().reverse();
     console.log(sortedDescending);
+    arrayDescend = [];
   }
 }
 
 function color() {
   var colorSort = [];
+  let red = 255;
   //repeated sort from the ascend and descend
   if (document.getElementById("mySelect3").value == "Color") {
     alert("Not a valid option");
@@ -179,7 +192,7 @@ function color() {
       let x = i;
       if (document.getElementById("mySelect3").value == headersForSort[i]) {
         for (let k = i; k < (dataWithoutHeaders.length / headersForSort.length); k++) {
-          colorSort.push(dataWithoutHeaders[x]);
+          colorSort.push(parseFloat(dataWithoutHeaders[x]));
           x += headersForSort.length;
         }
       }
@@ -198,8 +211,8 @@ function color() {
         }
         if (dataWithoutHeaders[x] == colorSort[0]) {
           //color lowest red
-          document.getElementById("div" + x).style.backgroundColor = "red";
-          document.getElementById("spnData" + x).style.backgroundColor = "red";
+          document.getElementById("div" + x).style.backgroundColor = "rgb("+red +", 0, 0)";
+          document.getElementById("spnData" + x).style.backgroundColor = "rgb(255, 0, 0)";
         }
           x += headersForSort.length;
       }
@@ -207,3 +220,52 @@ function color() {
   }
 }
 
+function colorPercent() {
+  var colorSort = [];
+  let red = 255;
+  let redscale
+  //repeated sort from the ascend and descend
+  if (document.getElementById("mySelect4").value == "Color 10%") {
+    alert("Not a valid option");
+  }
+  else {
+    for (let i = 0; i < headersForSort.length; i++) {
+      let x = i;
+      if (document.getElementById("mySelect4").value == headersForSort[i]) {
+        for (let k = i; k < (dataWithoutHeaders.length / headersForSort.length); k++) {
+          colorSort.push(parseFloat(dataWithoutHeaders[x]));
+          x += headersForSort.length;
+        }
+      }
+    }
+    colorSort = colorSort.sort();
+    let numDivided2 = colorSort.length/2;
+    numDivided = Math.ceil(numDivided2);
+    redscale = red/numDivided;
+  }
+  //using x to find which div and span has largest and smallest
+  for (let i = 0; i < headersForSort.length; i++) {
+    let x = i;
+    if (document.getElementById("mySelect4").value == headersForSort[i]) {
+      for (let k = i; k < (dataWithoutHeaders.length / headersForSort.length); k++) {
+        for (let j = 0; j < colorSort.length; j++) {
+        if (dataWithoutHeaders[x] == colorSort[j] && j > numDivided) {
+          //color largest green
+          document.getElementById("div" + x).style.backgroundColor = "rgb(0, "+red+", 0)";
+          document.getElementById("spnData" + x).style.backgroundColor = "rgb(0, "+red+", 0)";
+          red = red - redscale+12;
+        }
+      }
+        for (let j = 0; j < colorSort.length; j++) {
+        if (dataWithoutHeaders[x] == colorSort[j] && j <= numDivided) {
+          //color lowest red
+          document.getElementById("div" + x).style.backgroundColor = "rgb("+red +", 0, 0)";
+          document.getElementById("spnData" + x).style.backgroundColor = "rgb("+red +", 0, 0)";
+          red = red - redscale+12;
+        }
+      }
+          x += headersForSort.length;
+      }
+    }
+  }
+}
