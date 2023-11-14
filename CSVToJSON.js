@@ -1,5 +1,5 @@
-let json_data, newString, newString2, newString3, newString4, newString5, headers2, CVSdata2, styleNum = "", wrapperInfo, best, sortedAscending, sortedDescending, worst, numDivided, red = 255, id, green = 255, num = 0;
-let json_data_array = [], result = [], CVSheaders = [], CVSdata = [], dataWithoutHeaders = [], headersForSort = [], arrayAscend = [], arrayDescend = [];
+let json_data, newString, newString2, newString3, newString4, newString5, headers2, CVSdata2, styleNum = "", wrapperInfo, best, worst, numDivided, red = 255, id, green = 255, num = 0;
+let json_data_array = [], result = [], CVSheaders = [], CVSdata = [], dataWithoutHeaders = [], headersForSort = [], arrayAscend = [], arrayDescend = [], data1 = [], sortedAscending = [], sortedDescending = [];
 function csvJSON() {
   const testForm = document.getElementById("testForm");
   const csvDataFile = document.getElementById("UploadFile");
@@ -152,11 +152,17 @@ function displayData() {
   }
 }
 function sort(id) {
+  arrayAscend = [];
   let FirstIdVal = $('#' + id + ' option:nth-child(1)').val();
   if (document.getElementById(id).value == FirstIdVal) {
     alert("Not a valid option");
   }
   else {
+    let g = 0;
+    for (let k = 0; k < (dataWithoutHeaders.length / headersForSort.length); k++) {
+      data1.push(dataWithoutHeaders[g]);
+      g += headersForSort.length;
+    }
     for (let i = 0; i < headersForSort.length; i++) {
       let x = i;
       if (document.getElementById(id).value == headersForSort[i]) {
@@ -164,17 +170,38 @@ function sort(id) {
           arrayAscend.push(parseFloat(dataWithoutHeaders[x]));
           x += headersForSort.length;
         }
+
       }
     }
-    sortedAscending = arrayAscend.sort();
-    arrayAscend = [];
+    for (let f = 0; f < arrayAscend.length; f++) {
+      sortedAscending.push(arrayAscend[f]); 
+    }
+    sortedAscending = sortedAscending.sort();
+
   }
   return sortedAscending;
 }
 function sortAscending() {
   id = "mySelect";
   sort(id);
-  console.log(sortedAscending);
+var list = [];
+for (var j = 0; j < data1.length; j++) 
+    list.push({'team': data1[j], 'data': arrayAscend[j]});
+
+//2) sort:
+list.sort(function(a, b) {
+    return ((a.data < b.data) ? -1 : ((a.data == b.data) ? 0 : 1));
+    //Sort could be modified to, for example, sort on the age 
+    // if the name is the same. See Bonus section below
+});
+
+//3) separate them back out:
+for (var k = 0; k < list.length; k++) {
+  data1[k] = list[k].team;
+    arrayAscend[k] = list[k].data;
+}
+console.log(sortedAscending);
+console.log(data1);
 }
 
 function SortDescending() {
