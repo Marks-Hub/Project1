@@ -1,5 +1,5 @@
-var json_data, newString, newString2, newString3, newString4, headers2, CVSdata2, styleNum = "", wrapperInfo, best, sortedAscending, sortedDescending, worst, numDivided;
-var json_data_array = [], result = [], CVSheaders = [], CVSdata = [], dataWithoutHeaders = [], headersForSort = [], arrayAscend = [], arrayDescend = [];
+let json_data, newString, newString2, newString3, newString4, newString5, headers2, CVSdata2, styleNum = "", wrapperInfo, best, sortedAscending, sortedDescending, worst, numDivided, red = 255, id, green = 255, num = 0;
+let json_data_array = [], result = [], CVSheaders = [], CVSdata = [], dataWithoutHeaders = [], headersForSort = [], arrayAscend = [], arrayDescend = [];
 function csvJSON() {
   const testForm = document.getElementById("testForm");
   const csvDataFile = document.getElementById("UploadFile");
@@ -25,10 +25,10 @@ function csvJSON() {
 function clicky() {
   newString = json_data.replace(/{/g, "");
   newString2 = newString.replace(/"/g, "");
-  newString3 = newString2.replace(/]/g, "");
-  newString3 = newString2.replace(/}/g, "");
-  newString4 = newString3.replace("[", "");
-  json_data_array = newString4.split(',');
+  newString3 = newString2.replace("]", "");
+  newString4 = newString3.replace(/}/g, "");
+  newString5 = newString4.replace("[", "");
+  json_data_array = newString5.split(',');
 
   for (let i = 0; i < json_data_array.length; i++) {
     CVSheaders.push(json_data_array[i].split(':', 1));
@@ -129,8 +129,8 @@ function displayData() {
     selectList3.appendChild(option3);
   }
   ////////////////////////////////////////////////////////////
-  //color 10% code
-  var selectList4 = document.getElementById("color10");
+  //color Scale code
+  var selectList4 = document.getElementById("colorScale");
   selectList4.setAttribute("id", "mySelect4");
   //Create and append the options
   for (var i = 0; i < headersForSort.length; i++) {
@@ -139,82 +139,69 @@ function displayData() {
     option4.text = headersForSort[i];
     selectList4.appendChild(option4);
   }
+  ////////////////////////////////////////////////////////////
+  //color Scale code
+  var selectList5 = document.getElementById("color10");
+  selectList5.setAttribute("id", "mySelect5");
+  //Create and append the options
+  for (var i = 0; i < headersForSort.length; i++) {
+    var option5 = document.createElement("option");
+    option5.setAttribute("value", headersForSort[i]);
+    option5.text = headersForSort[i];
+    selectList5.appendChild(option5);
+  }
 }
-function sortAscending() {
-  if (document.getElementById("mySelect").value == "Sort Ascending") {
+function sort(id) {
+  let FirstIdVal = $('#' + id + ' option:nth-child(1)').val();
+  if (document.getElementById(id).value == FirstIdVal) {
     alert("Not a valid option");
   }
   else {
     for (let i = 0; i < headersForSort.length; i++) {
       let x = i;
-      if (document.getElementById("mySelect").value == headersForSort[i]) {
-        for (let k = i; k < (dataWithoutHeaders.length / headersForSort.length); k++) {
-          arrayAscend.push(dataWithoutHeaders[x]);
+      if (document.getElementById(id).value == headersForSort[i]) {
+        for (let k = 0; k < (dataWithoutHeaders.length / headersForSort.length); k++) {
+          arrayAscend.push(parseFloat(dataWithoutHeaders[x]));
           x += headersForSort.length;
         }
       }
     }
     sortedAscending = arrayAscend.sort();
-    console.log(sortedAscending);
     arrayAscend = [];
   }
+  return sortedAscending;
+}
+function sortAscending() {
+  id = "mySelect";
+  sort(id);
+  console.log(sortedAscending);
 }
 
 function SortDescending() {
-  if (document.getElementById("mySelect2").value == "Sort Descending") {
-    alert("Not a valid option");
-  }
-  else {
-    for (let i = 0; i < headersForSort.length; i++) {
-      let x = i;
-      if (document.getElementById("mySelect2").value == headersForSort[i]) {
-        for (let k = i; k < (dataWithoutHeaders.length / headersForSort.length); k++) {
-          arrayDescend.push(dataWithoutHeaders[x]);
-          x += headersForSort.length;
-        }
-      }
-    }
-    sortedDescending = arrayDescend.sort().reverse();
-    console.log(sortedDescending);
-    arrayDescend = [];
-  }
+  id = "mySelect2";
+  sort(id);
+  console.log(sortedAscending.reverse());
 }
 
 function color() {
-  var colorSort = [];
-  let red = 255;
-  //repeated sort from the ascend and descend
-  if (document.getElementById("mySelect3").value == "Color") {
-    alert("Not a valid option");
-  }
-  else {
-    for (let i = 0; i < headersForSort.length; i++) {
-      let x = i;
-      if (document.getElementById("mySelect3").value == headersForSort[i]) {
-        for (let k = i; k < (dataWithoutHeaders.length / headersForSort.length); k++) {
-          colorSort.push(parseFloat(dataWithoutHeaders[x]));
-          x += headersForSort.length;
-        }
-      }
-    }
-    colorSort = colorSort.sort();
-  }
+  id = "mySelect3";
+  sort(id);
   //using x to find which div and span has largest and smallest
   for (let i = 0; i < headersForSort.length; i++) {
     let x = i;
     if (document.getElementById("mySelect3").value == headersForSort[i]) {
-      for (let k = i; k < (dataWithoutHeaders.length / headersForSort.length); k++) {
-        if (dataWithoutHeaders[x] == colorSort[colorSort.length - 1]) {
+      for (let k = 0; k < (dataWithoutHeaders.length / headersForSort.length); k++) {
+        if (dataWithoutHeaders[x] == sortedAscending[sortedAscending.length - 1]) {
           //color largest green
           document.getElementById("div" + x).style.backgroundColor = "green";
           document.getElementById("spnData" + x).style.backgroundColor = "green";
         }
-        if (dataWithoutHeaders[x] == colorSort[0]) {
+        if (dataWithoutHeaders[x] == sortedAscending[0]) {
           //color lowest red
-          document.getElementById("div" + x).style.backgroundColor = "rgb("+red +", 0, 0)";
-          document.getElementById("spnData" + x).style.backgroundColor = "rgb(255, 0, 0)";
+          document.getElementById("div" + x).style.backgroundColor = "red";
+          document.getElementById("spnData" + x).style.backgroundColor = "red";
         }
-          x += headersForSort.length;
+        x += headersForSort.length;
       }
     }
   }
@@ -222,49 +209,104 @@ function color() {
 
 function colorPercent() {
   var colorSort = [];
-  let red = 255;
-  let redscale
+  let redscale = 0;
+  let greenscale = 0;
   //repeated sort from the ascend and descend
-  if (document.getElementById("mySelect4").value == "Color 10%") {
+  if (document.getElementById("mySelect4").value == "Color Scale") {
     alert("Not a valid option");
   }
   else {
     for (let i = 0; i < headersForSort.length; i++) {
       let x = i;
       if (document.getElementById("mySelect4").value == headersForSort[i]) {
-        for (let k = i; k < (dataWithoutHeaders.length / headersForSort.length); k++) {
+        for (let k = 0; k < (dataWithoutHeaders.length / headersForSort.length); k++) {
           colorSort.push(parseFloat(dataWithoutHeaders[x]));
           x += headersForSort.length;
         }
       }
     }
     colorSort = colorSort.sort();
-    let numDivided2 = colorSort.length/2;
+    let numDivided2 = colorSort.length / 2;
     numDivided = Math.ceil(numDivided2);
-    redscale = red/numDivided;
+    redscale = red / numDivided;
+    greenscale = green / numDivided;
   }
   //using x to find which div and span has largest and smallest
   for (let i = 0; i < headersForSort.length; i++) {
     let x = i;
     if (document.getElementById("mySelect4").value == headersForSort[i]) {
-      for (let k = i; k < (dataWithoutHeaders.length / headersForSort.length); k++) {
+      for (let k = 0; k < (dataWithoutHeaders.length / headersForSort.length); k++) {
         for (let j = 0; j < colorSort.length; j++) {
-        if (dataWithoutHeaders[x] == colorSort[j] && j > numDivided) {
-          //color largest green
-          document.getElementById("div" + x).style.backgroundColor = "rgb(0, "+red+", 0)";
-          document.getElementById("spnData" + x).style.backgroundColor = "rgb(0, "+red+", 0)";
-          red = red - redscale+12;
+          if (dataWithoutHeaders[x] == colorSort[j] && j > numDivided) {
+            //color largest green
+            document.getElementById("div" + x).style.backgroundColor = "rgb(0, " + green + ", 0)";
+            document.getElementById("spnData" + x).style.backgroundColor = "rgb(0, " + green + ", 0)";
+            green = green - greenscale + 12;
+          }
         }
-      }
         for (let j = 0; j < colorSort.length; j++) {
-        if (dataWithoutHeaders[x] == colorSort[j] && j <= numDivided) {
-          //color lowest red
-          document.getElementById("div" + x).style.backgroundColor = "rgb("+red +", 0, 0)";
-          document.getElementById("spnData" + x).style.backgroundColor = "rgb("+red +", 0, 0)";
-          red = red - redscale+12;
+          if (dataWithoutHeaders[x] == colorSort[j] && j <= numDivided) {
+            //color lowest red
+            document.getElementById("div" + x).style.backgroundColor = "rgb(" + red + ", 0, 0)";
+            document.getElementById("spnData" + x).style.backgroundColor = "rgb(" + red + ", 0, 0)";
+            red = red - redscale + 12;
+          }
         }
+        x += headersForSort.length;
       }
-          x += headersForSort.length;
+    }
+  }
+}
+
+function color10() {
+  id = "mySelect5";
+  sort(id);
+  num = (sortedAscending.length / 10);
+  num = Math.round(num);
+  console.log(num);
+  console.log(Math.round(-5.5));
+  let aray = [];
+  let reverseAray = [];
+  for (let m = 0; m < sortedAscending.length; m++) {
+    if (m < num) {
+      aray.push(sortedAscending[m]);
+      reverseAray.push(sortedAscending[sortedAscending.length - m - 1]);
+    }
+  }
+  console.log(reverseAray);
+  //using x to find which div and span has largest and smallest
+  for (let i = 0; i < headersForSort.length; i++) {
+    let x = i;
+    let p = 0;
+    let a = 0;
+    if (document.getElementById("mySelect5").value == headersForSort[i]) {
+      for (let k = 0; k < (sortedAscending.length); k++) {
+        for (let n = 0; n < aray.length; n++) {
+          if (dataWithoutHeaders[x] == aray[p] && p < num) {
+            //color lowest red
+            if (document.getElementById("div" + x).style.backgroundColor != "red") {
+              document.getElementById("div" + x).style.backgroundColor = "red";
+              document.getElementById("spnData" + x).style.backgroundColor = "red";
+              p++;
+              x = i;
+              k = 0;
+            }
+          }
+        }
+        for (let n = 0; n < reverseAray.length; n++) {
+          if (dataWithoutHeaders[x] == reverseAray[a] && a < num) {
+            if (document.getElementById("div" + x).style.backgroundColor != "green") {
+              //color largest green
+              document.getElementById("div" + x).style.backgroundColor = "green";
+              document.getElementById("spnData" + x).style.backgroundColor = "green";
+              a++;
+              x = i;
+              k = 0;
+            }
+          }
+        }
+        x += headersForSort.length;
+
       }
     }
   }
