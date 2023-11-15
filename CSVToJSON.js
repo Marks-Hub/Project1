@@ -1,5 +1,5 @@
-let json_data, newString, newString2, newString3, newString4, newString5, headers2, CVSdata2, styleNum = "", wrapperInfo, best, sortedAscending, sortedDescending, worst, numDivided, red = 255, id, green = 255, num = 0;
-let json_data_array = [], result = [], CVSheaders = [], CVSdata = [], dataWithoutHeaders = [], headersForSort = [], arrayAscend = [], arrayDescend = [];
+let json_data, newString, newString2, newString3, newString4, newString5, headers2, CVSdata2, styleNum = "", wrapperInfo, best, worst, id, num = 0;
+let json_data_array = [], result = [], CVSheaders = [], CVSdata = [], dataWithoutHeaders = [], headersForSort = [], arrayAscend = [], arrayDescend = [], data1 = [], sortedAscending = [], sortedDescending = [];
 function csvJSON() {
   const testForm = document.getElementById("testForm");
   const csvDataFile = document.getElementById("UploadFile");
@@ -152,11 +152,17 @@ function displayData() {
   }
 }
 function sort(id) {
+  arrayAscend = [];
   let FirstIdVal = $('#' + id + ' option:nth-child(1)').val();
   if (document.getElementById(id).value == FirstIdVal) {
     alert("Not a valid option");
   }
   else {
+    let g = 0;
+    for (let k = 0; k < (dataWithoutHeaders.length / headersForSort.length); k++) {
+      data1.push(dataWithoutHeaders[g]);
+      g += headersForSort.length;
+    }
     for (let i = 0; i < headersForSort.length; i++) {
       let x = i;
       if (document.getElementById(id).value == headersForSort[i]) {
@@ -164,17 +170,38 @@ function sort(id) {
           arrayAscend.push(parseFloat(dataWithoutHeaders[x]));
           x += headersForSort.length;
         }
+
       }
     }
-    sortedAscending = arrayAscend.sort();
-    arrayAscend = [];
+    for (let f = 0; f < arrayAscend.length; f++) {
+      sortedAscending.push(arrayAscend[f]);
+    }
+    sortedAscending = sortedAscending.sort();
+
   }
   return sortedAscending;
 }
 function sortAscending() {
   id = "mySelect";
   sort(id);
+  var list = [];
+  for (var j = 0; j < data1.length; j++)
+    list.push({ 'team': data1[j], 'data': arrayAscend[j] });
+
+  //2) sort:
+  list.sort(function (a, b) {
+    return ((a.data < b.data) ? -1 : ((a.data == b.data) ? 0 : 1));
+    //Sort could be modified to, for example, sort on the age 
+    // if the name is the same. See Bonus section below
+  });
+
+  //3) separate them back out:
+  for (var k = 0; k < list.length; k++) {
+    data1[k] = list[k].team;
+    arrayAscend[k] = list[k].data;
+  }
   console.log(sortedAscending);
+  console.log(data1);
 }
 
 function SortDescending() {
@@ -185,6 +212,7 @@ function SortDescending() {
 
 function color() {
   id = "mySelect3";
+  sortedAscending = [];
   sort(id);
   //using x to find which div and span has largest and smallest
   for (let i = 0; i < headersForSort.length; i++) {
@@ -207,49 +235,61 @@ function color() {
   }
 }
 
-function colorPercent() {
-  var colorSort = [];
+function colorScale() {
+  let red = 100;
+  let green = 100;
+  id = "mySelect4";
+  sortedAscending = [];
+  sort(id);
   let redscale = 0;
   let greenscale = 0;
+  let figure = sortedAscending.length / 3;
+  figure = Math.ceil(figure);
+  let top = [], middle = [], bottom = [];
   //repeated sort from the ascend and descend
-  if (document.getElementById("mySelect4").value == "Color Scale") {
-    alert("Not a valid option");
+  for (let i = 0; i < sortedAscending.length; i++) {
+    if (i < figure){
+    top.push(sortedAscending[i]);
   }
-  else {
-    for (let i = 0; i < headersForSort.length; i++) {
-      let x = i;
-      if (document.getElementById("mySelect4").value == headersForSort[i]) {
-        for (let k = 0; k < (dataWithoutHeaders.length / headersForSort.length); k++) {
-          colorSort.push(parseFloat(dataWithoutHeaders[x]));
-          x += headersForSort.length;
-        }
-      }
-    }
-    colorSort = colorSort.sort();
-    let numDivided2 = colorSort.length / 2;
-    numDivided = Math.ceil(numDivided2);
-    redscale = red / numDivided;
-    greenscale = green / numDivided;
+  else if (i >= figure && i < figure+figure){
+    middle.push(sortedAscending[i]);
   }
+  else if (i >= figure+figure){
+    bottom.push(sortedAscending[i]);
+  }
+  }
+  redscale = 155 / top.length;
+  greenscale = 155 / bottom.length;
+  console.log(sortedAscending);
+  console.log(top);
+  console.log(middle);
+  console.log(bottom);
   //using x to find which div and span has largest and smallest
   for (let i = 0; i < headersForSort.length; i++) {
     let x = i;
     if (document.getElementById("mySelect4").value == headersForSort[i]) {
       for (let k = 0; k < (dataWithoutHeaders.length / headersForSort.length); k++) {
-        for (let j = 0; j < colorSort.length; j++) {
-          if (dataWithoutHeaders[x] == colorSort[j] && j > numDivided) {
+        for (let j = 0; j < bottom.length; j++) {
+          if (dataWithoutHeaders[x] == bottom[j]) {
             //color largest green
             document.getElementById("div" + x).style.backgroundColor = "rgb(0, " + green + ", 0)";
             document.getElementById("spnData" + x).style.backgroundColor = "rgb(0, " + green + ", 0)";
-            green = green - greenscale + 12;
+            green += greenscale;
           }
         }
-        for (let j = 0; j < colorSort.length; j++) {
-          if (dataWithoutHeaders[x] == colorSort[j] && j <= numDivided) {
+        for (let j = 0; j < middle.length; j++) {
+          if (dataWithoutHeaders[x] == middle[j]) {
+            //color largest green
+            document.getElementById("div" + x).style.backgroundColor = "rgb(255, 255, 0)";
+            document.getElementById("spnData" + x).style.backgroundColor = "rgb(255, 255, 0)";
+          }
+        }
+        for (let j = 0; j < top.length; j++) {
+          if (dataWithoutHeaders[x] == top[j]) {
             //color lowest red
             document.getElementById("div" + x).style.backgroundColor = "rgb(" + red + ", 0, 0)";
             document.getElementById("spnData" + x).style.backgroundColor = "rgb(" + red + ", 0, 0)";
-            red = red - redscale + 12;
+            red += redscale;
           }
         }
         x += headersForSort.length;
@@ -260,6 +300,7 @@ function colorPercent() {
 
 function color10() {
   id = "mySelect5";
+  sortedAscending = [];
   sort(id);
   num = (sortedAscending.length / 10);
   num = Math.round(num);
