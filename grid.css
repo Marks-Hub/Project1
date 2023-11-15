@@ -1,7 +1,7 @@
 span {
     font-style: italic;
-    background-color: rgb(255, 255, 255);
-    color: rgb(0, 0, 0);
+    background-color: rgb(0, 247, 255);
+    color: red;
 
 }
 
@@ -12,10 +12,32 @@ span {
     background-color: #ffffff;
     color: #111;
     height: 250px;
+    margin-bottom: 100%;
+}
+
+.sortingA {
+    float: left;
+    width: 250px;
+    height: 150px;
+    background: rgb(213, 117, 33);
+    margin: 5px;
+    position: absolute;
+    bottom: -800px;
+}
+
+.sortingB {
+    float: right;
+    width: 250px;
+    height: 150px;
+    background: rgb(35, 205, 157);
+    margin: 5px;
+    position: absolute;
+    bottom: -800px;
+    left: 250px;
 }
 
 .box {
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(0, 247, 255);
     color: #111;
     border-radius: 5px;
     padding: 5px;
