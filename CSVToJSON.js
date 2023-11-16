@@ -1,5 +1,5 @@
 let json_data, newString, newString2, newString3, newString4, newString5, headers2, CVSdata2, styleNum = "", wrapperInfo, best, worst, id, num = 0;
-let json_data_array = [], result = [], CVSheaders = [], CVSdata = [], dataWithoutHeaders = [], headersForSort = [], arrayAscend = [], arrayDescend = [], data1 = [], sortedAscending = [], sortedDescending = [];
+let json_data_array = [], result = [], CVSheaders = [], CVSdata = [], dataWithoutHeaders = [], headersForSort = [], arrayAscend = [], arrayDescend = [], names = [], sortedAscending = [], sortedDescending = [], standardized = [];
 function csvJSON() {
   const testForm = document.getElementById("testForm");
   const csvDataFile = document.getElementById("UploadFile");
@@ -150,6 +150,15 @@ function displayData() {
     option5.text = headersForSort[i];
     selectList5.appendChild(option5);
   }
+  var selectList6 = document.getElementById("standardizeNums");
+  selectList6.setAttribute("id", "mySelect6");
+  //Create and append the options
+  for (var i = 0; i < headersForSort.length; i++) {
+    var option6 = document.createElement("option");
+    option6.setAttribute("value", headersForSort[i]);
+    option6.text = headersForSort[i];
+    selectList6.appendChild(option6);
+  }
 }
 function sort(id) {
   arrayAscend = [];
@@ -160,7 +169,7 @@ function sort(id) {
   else {
     let g = 0;
     for (let k = 0; k < (dataWithoutHeaders.length / headersForSort.length); k++) {
-      data1.push(dataWithoutHeaders[g]);
+      names.push(dataWithoutHeaders[g]);
       g += headersForSort.length;
     }
     for (let i = 0; i < headersForSort.length; i++) {
@@ -185,8 +194,8 @@ function sortAscending() {
   id = "mySelect";
   sort(id);
   var list = [];
-  for (var j = 0; j < data1.length; j++)
-    list.push({ 'team': data1[j], 'data': arrayAscend[j] });
+  for (var j = 0; j < names.length; j++)
+    list.push({ 'team': names[j], 'data': arrayAscend[j] });
 
   //2) sort:
   list.sort(function (a, b) {
@@ -197,11 +206,11 @@ function sortAscending() {
 
   //3) separate them back out:
   for (var k = 0; k < list.length; k++) {
-    data1[k] = list[k].team;
+    names[k] = list[k].team;
     arrayAscend[k] = list[k].data;
   }
   console.log(sortedAscending);
-  console.log(data1);
+  console.log(names);
 }
 
 function SortDescending() {
@@ -261,10 +270,6 @@ function colorScale() {
       bottom.push(sortedAscending[i]);
     }
   }
-  console.log(sortedAscending);
-  console.log(top);
-  console.log(middle);
-  console.log(bottom);
   //using x to find which div and span has largest and smallest
   for (let i = 0; i < headersForSort.length; i++) {
     let x = i;
@@ -279,21 +284,21 @@ function colorScale() {
         }
         for (let j = 0; j < bottomMiddle.length; j++) {
           if (dataWithoutHeaders[x] == bottomMiddle[j]) {
-            //color largest green
+            //color lime
             document.getElementById("div" + x).style.backgroundColor = "rgb(50, 205, 50)";
             document.getElementById("spnData" + x).style.backgroundColor = "rgb(50, 205, 50)";
           }
         }
         for (let j = 0; j < middle.length; j++) {
           if (dataWithoutHeaders[x] == middle[j]) {
-            //color largest green
+            //color yellow
             document.getElementById("div" + x).style.backgroundColor = "rgb(255, 255, 0)";
             document.getElementById("spnData" + x).style.backgroundColor = "rgb(255, 255, 0)";
           }
         }
         for (let j = 0; j < topMiddle.length; j++) {
           if (dataWithoutHeaders[x] == topMiddle[j]) {
-            //color lowest red
+            //color orange
             document.getElementById("div" + x).style.backgroundColor = "	rgb(255,165,0)";
             document.getElementById("spnData" + x).style.backgroundColor = "	rgb(255,165,0)";
           }
@@ -317,8 +322,7 @@ function color10() {
   sort(id);
   num = (sortedAscending.length / 10);
   num = Math.round(num);
-  console.log(num);
-  console.log(Math.round(-5.5));
+
   let aray = [];
   let reverseAray = [];
   for (let m = 0; m < sortedAscending.length; m++) {
@@ -327,7 +331,7 @@ function color10() {
       reverseAray.push(sortedAscending[sortedAscending.length - m - 1]);
     }
   }
-  console.log(reverseAray);
+
   //using x to find which div and span has largest and smallest
   for (let i = 0; i < headersForSort.length; i++) {
     let x = i;
@@ -364,4 +368,57 @@ function color10() {
       }
     }
   }
+}
+class Avg {
+  constructor() {}
+
+  static average(array) {
+      var total = 0;
+      var count = 0;
+
+      jQuery.each(array, function(index, value) {
+          total += value;
+          count++;
+      });
+
+      return total / count;
+  }
+}
+function getStandardDeviation (array) {
+  const n = array.length
+  const mean = array.reduce((a, b) => a + b) / n
+  return Math.sqrt(array.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n)
+}
+function standardization(array){
+  let mean = Avg.average(arrayAscend);
+  standardized = [];
+  let StandardDev = getStandardDeviation(arrayAscend);
+for (let i = 0; i < array.length; i++) {
+  standardized.push((array[i]-mean)/StandardDev);
+}
+return standardized;
+}
+function standardizeNums(){
+  id = "mySelect6";
+  sort(id);
+  let mean = Avg.average(arrayAscend);
+  let StandardDev = getStandardDeviation(arrayAscend);
+  standardization(arrayAscend);
+  console.log(StandardDev);
+  console.log(mean);
+  console.log(standardized)
+  for (let i = 0; i < headersForSort.length; i++) {
+    let x = i;
+    if (document.getElementById("mySelect6").value == headersForSort[i]) {
+      for (let k = 0; k < (dataWithoutHeaders.length / headersForSort.length); k++) {
+
+
+          document.getElementById("spnData" + x).innerHTML = standardized[k].toFixed(3);
+        
+        x += headersForSort.length;
+      }
+    }
+  }
+  //console.log(sortedAscending);
+  //console.log(names);
 }
