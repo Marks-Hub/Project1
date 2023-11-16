@@ -176,7 +176,7 @@ function sort(id) {
     for (let f = 0; f < arrayAscend.length; f++) {
       sortedAscending.push(arrayAscend[f]);
     }
-    sortedAscending = sortedAscending.sort(function(a, b){return a-b});
+    sortedAscending = sortedAscending.sort(function (a, b) { return a - b });
 
   }
   return sortedAscending;
@@ -236,31 +236,31 @@ function color() {
 }
 
 function colorScale() {
-  let red = 100;
-  let green = 100;
   id = "mySelect4";
   sortedAscending.sort((a, b) => a - b)
   sortedAscending = [];
   sort(id);
-  let redscale = 0;
-  let greenscale = 0;
-  let figure = sortedAscending.length / 3;
+  let figure = sortedAscending.length / 5;
   figure = Math.ceil(figure);
-  let top = [], middle = [], bottom = [];
+  let top = [], topMiddle = [], middle = [], bottomMiddle = [], bottom = [];
   //repeated sort from the ascend and descend
   for (let i = 0; i < sortedAscending.length; i++) {
-    if (i < figure){
-    top.push(sortedAscending[i]);
+    if (i < figure) {
+      top.push(sortedAscending[i]);
+    }
+    else if (i >= figure && i < figure * 2) {
+      topMiddle.push(sortedAscending[i]);
+    }
+    else if (i >= figure * 2 && i < figure * 3) {
+      middle.push(sortedAscending[i]);
+    }
+    else if (i >= figure * 3 && i < figure * 4) {
+      bottomMiddle.push(sortedAscending[i]);
+    }
+    else if (i >= figure & 5) {
+      bottom.push(sortedAscending[i]);
+    }
   }
-  else if (i >= figure && i < figure+figure){
-    middle.push(sortedAscending[i]);
-  }
-  else if (i >= figure+figure){
-    bottom.push(sortedAscending[i]);
-  }
-  }
-  redscale = 155 / top.length;
-  greenscale = 155 / bottom.length;
   console.log(sortedAscending);
   console.log(top);
   console.log(middle);
@@ -277,11 +277,25 @@ function colorScale() {
             document.getElementById("spnData" + x).style.backgroundColor = "green";
           }
         }
+        for (let j = 0; j < bottomMiddle.length; j++) {
+          if (dataWithoutHeaders[x] == bottomMiddle[j]) {
+            //color largest green
+            document.getElementById("div" + x).style.backgroundColor = "rgb(50, 205, 50)";
+            document.getElementById("spnData" + x).style.backgroundColor = "rgb(50, 205, 50)";
+          }
+        }
         for (let j = 0; j < middle.length; j++) {
           if (dataWithoutHeaders[x] == middle[j]) {
             //color largest green
             document.getElementById("div" + x).style.backgroundColor = "rgb(255, 255, 0)";
             document.getElementById("spnData" + x).style.backgroundColor = "rgb(255, 255, 0)";
+          }
+        }
+        for (let j = 0; j < topMiddle.length; j++) {
+          if (dataWithoutHeaders[x] == topMiddle[j]) {
+            //color lowest red
+            document.getElementById("div" + x).style.backgroundColor = "	rgb(255,165,0)";
+            document.getElementById("spnData" + x).style.backgroundColor = "	rgb(255,165,0)";
           }
         }
         for (let j = 0; j < top.length; j++) {
