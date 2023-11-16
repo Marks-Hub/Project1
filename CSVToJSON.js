@@ -176,7 +176,7 @@ function sort(id) {
     for (let f = 0; f < arrayAscend.length; f++) {
       sortedAscending.push(arrayAscend[f]);
     }
-    sortedAscending = sortedAscending.sort();
+    sortedAscending = sortedAscending.sort(function(a, b){return a-b});
 
   }
   return sortedAscending;
@@ -239,6 +239,7 @@ function colorScale() {
   let red = 100;
   let green = 100;
   id = "mySelect4";
+  sortedAscending.sort((a, b) => a - b)
   sortedAscending = [];
   sort(id);
   let redscale = 0;
@@ -272,9 +273,8 @@ function colorScale() {
         for (let j = 0; j < bottom.length; j++) {
           if (dataWithoutHeaders[x] == bottom[j]) {
             //color largest green
-            document.getElementById("div" + x).style.backgroundColor = "rgb(0, " + green + ", 0)";
-            document.getElementById("spnData" + x).style.backgroundColor = "rgb(0, " + green + ", 0)";
-            green += greenscale;
+            document.getElementById("div" + x).style.backgroundColor = "green";
+            document.getElementById("spnData" + x).style.backgroundColor = "green";
           }
         }
         for (let j = 0; j < middle.length; j++) {
@@ -287,9 +287,8 @@ function colorScale() {
         for (let j = 0; j < top.length; j++) {
           if (dataWithoutHeaders[x] == top[j]) {
             //color lowest red
-            document.getElementById("div" + x).style.backgroundColor = "rgb(" + red + ", 0, 0)";
-            document.getElementById("spnData" + x).style.backgroundColor = "rgb(" + red + ", 0, 0)";
-            red += redscale;
+            document.getElementById("div" + x).style.backgroundColor = "red";
+            document.getElementById("spnData" + x).style.backgroundColor = "red";
           }
         }
         x += headersForSort.length;
