@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV to Json testing</title>
+    <link rel="stylesheet" type="text/css" href="grid.css">
+</head>
+
+<body onload="displayData()" id="body">
+
+    <form id="testForm">
+        <input type="file" id="UploadFile" accept=".csv" />
+        <br />
+        <input onclick="csvJSON()" type="submit" class="button" value="submit" />
+    </form>
+    <button class="button" onclick="clicky()">Prepare Data!</button>
+    <button class="button" onclick="displayData()">Display Data</button>
+    <button class="button" onclick="Clear()">Clear</button>
+    <select id="sortAscending" onchange="sortAscending()">
+        <option>Sort Ascending</option>
+    </select>
+    <select id="sortDescending" onchange="SortDescending()">
+        <option>Sort Descending</option>
+    </select>
+    <select id="color" onchange="color()">
+        <option>Color</option>
+    </select>
+    <select id="colorScale" onchange="colorScale()">
+        <option>Color Scale</option>
+    </select>
+    <select id="color10" onchange="color10()">
+        <option>Color 10%</option>
+    </select>
+    <select id="standardizeNums" onchange="standardizeNums()">
+        <option>Standardize</option>
+    </select>
+    <script src="CSVToJSON.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
+    </script>
+    <div class="wrapper" id="wrap">
+
+    </div>
+    <script>
+
+    </script>
+    <p id="Text"></p>
+</body>
+
+</html>
